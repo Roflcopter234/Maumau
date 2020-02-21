@@ -60,3 +60,17 @@ class Game:
                 self.p2cards.append(self.stapel.karten.pop())
 
             self.ablage = self.stapel.karten.pop()
+
+    def ziehen(self, player):
+        if player == 0:
+            self.p1cards.append(self.stapel.karten.pop())
+        elif player == 1:
+            self.p2cards.append(self.stapel.karten.pop())
+
+    def legen(self, player, index):
+        if player == 0:
+            self.rest.append(self.ablage)
+            self.ablage = self.p1cards.pop(index)
+        elif player == 1:
+            self.rest.append(self.ablage)
+            self.ablage = self.p1cards.pop(index)

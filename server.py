@@ -5,7 +5,7 @@ from card import Card
 from stapel import Stapel
 import pickle
 
-server = "192.168.178.21"
+server = "192.168.56.1"
 port = 5555
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

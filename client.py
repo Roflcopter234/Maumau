@@ -3,11 +3,15 @@ import math
 from network import Network
 from game import Game
 import pickle
+import sys
 pygame.font.init()
+
+pygame.init()
 
 width = 900
 height = 900
-win = pygame.display.set_mode((width, height))
+monitor_size = [pygame.display.Info().current_w, pygame.display.Info().current_h]
+win = pygame.display.set_mode((width, height), pygame.RESIZABLE)
 pygame.display.set_caption("Client")
 
 
@@ -99,7 +103,7 @@ def show_cards(win, game, p):
 def show_cards_u(win, game, p, anzahl):
     slot = []
     breite = 145 * anzahl
-    startpunkt = 450 - breite/anzahl
+    startpunkt = math.floor((900 - breite)/2)
     for x in range(anzahl):
         slot.append(startpunkt + x*145)
 
@@ -135,7 +139,7 @@ def show_cards_o(win, game, p, anzahl):
 def show_cards_uu(win, game, p, anzahl):
     slot = []
     breite = 145 * anzahl
-    startpunkt = 450 - breite / anzahl
+    startpunkt = math.floor((900 - breite)/2)
     for x in range(anzahl):
         slot.append(startpunkt + x * 145)
 
@@ -168,6 +172,93 @@ def show_cards_oo(win, game, p, anzahl):
     # 8*145 = 1160 => 1015 für 7 =>
 
 
+def show_back(win, game, p):
+    if p == 0:
+        if len(game.p2cards) == 1:
+            showbacks_u(win, game, p, 1)
+        elif len(game.p2cards) == 2:
+            showbacks_u(win, game, p, 2)
+        elif len(game.p2cards) == 3:
+            showbacks_u(win, game, p, 3)
+        elif len(game.p2cards) == 4:
+            showbacks_u(win, game, p, 4)
+        elif len(game.p2cards) == 5:
+            showbacks_u(win, game, p, 5)
+        elif len(game.p2cards) == 6:
+            showbacks_u(win, game, p, 6)
+        elif len(game.p2cards) == 7:
+            showbacks_o(win, game, p, 7)
+        elif len(game.p2cards) == 8:
+            showbacks_o(win, game, p, 8)
+        elif len(game.p2cards) == 9:
+            showbacks_o(win, game, p, 9)
+        elif len(game.p2cards) == 10:
+            showbacks_o(win, game, p, 10)
+        elif len(game.p2cards) == 11:
+            showbacks_o(win, game, p, 11)
+        elif len(game.p2cards) == 12:
+            showbacks_o(win, game, p, 12)
+        elif len(game.p2cards) == 13:
+            showbacks_o(win, game, p, 13)
+        elif len(game.p2cards) == 14:
+            showbacks_o(win, game, p, 14)
+    elif p == 1:
+        if len(game.p2cards) == 1:
+            showbacks_u(win, game, p, 1)
+        elif len(game.p1cards) == 2:
+            showbacks_u(win, game, p, 2)
+        elif len(game.p1cards) == 3:
+            showbacks_u(win, game, p, 3)
+        elif len(game.p1cards) == 4:
+            showbacks_u(win, game, p, 4)
+        elif len(game.p1cards) == 5:
+            showbacks_u(win, game, p, 5)
+        elif len(game.p1cards) == 6:
+            showbacks_u(win, game, p, 6)
+        elif len(game.p1cards) == 7:
+            showbacks_o(win, game, p, 7)
+        elif len(game.p1cards) == 8:
+            showbacks_o(win, game, p, 8)
+        elif len(game.p1cards) == 9:
+            showbacks_o(win, game, p, 9)
+        elif len(game.p1cards) == 10:
+            showbacks_o(win, game, p, 10)
+        elif len(game.p1cards) == 11:
+            showbacks_o(win, game, p, 11)
+        elif len(game.p1cards) == 12:
+            showbacks_o(win, game, p, 12)
+        elif len(game.p1cards) == 13:
+            showbacks_o(win, game, p, 13)
+        elif len(game.p1cards) == 14:
+            showbacks_o(win, game, p, 14)
+
+
+def showbacks_u(win, game, p, anzahl):
+    slots = []
+    breite = 145 * anzahl
+    startpunkt = math.floor((900 - breite)/2)
+    for x in range(anzahl):
+        slots.append(startpunkt + x * 145)
+
+    for x in range(anzahl):
+        k1 = pygame.image.load('img/back.png')
+        k1 = pygame.transform.scale(k1, (145, 250))
+        win.blit(k1, (slots[x], -90))
+
+
+def showbacks_o(win, game, p, anzahl):
+    slots = []
+    breite = math.floor(755 / anzahl - 1)
+    rest = 755 - breite * anzahl - 1
+    for x in range(anzahl - 1):
+        slots.append(rest + x * breite)
+
+    for x in range(anzahl - 1):
+        k1 = pygame.image.load('img/back.png')
+        k1 = pygame.transform.scale(k1, (145, 250))
+        win.blit(k1, (slots[x], -90))
+
+
 def redrawWindow(win, game, p):
     win.fill((128, 128, 128))
 
@@ -178,10 +269,10 @@ def redrawWindow(win, game, p):
     else:
         font = pygame.font.SysFont("arial", 40)
         text = font.render("Player1", 1, (255, 0, 0))
-        win.blit(text, (180, 600))
+        win.blit(text, (80, 700))
 
         text = font.render("Player2", 1, (255, 0, 0))
-        win.blit(text, (680, 100))
+        win.blit(text, (80, 170))
 
         for btnn in btns:
             btnn.draw(win)
@@ -197,6 +288,13 @@ def redrawWindow(win, game, p):
 
         #karten anzeigen
         show_cards(win, game, p)
+        show_back(win, game, p)
+
+        for btn1 in btns1:
+            btn1.draw(win)
+
+        for btn2 in btns2:
+            btn2.draw(win)
 
 
     pygame.display.update()
@@ -206,11 +304,16 @@ btns = [Button("", 290, 340, (255, 255, 255)), Button("", 460, 340, (255, 255, 2
 btns1 = []
 btns2 = []
 
+
 def main():
     run = True
     clock = pygame.time.Clock()
     n = Network()
     player = int(n.getP())
+    fullscreen = False
+    global win
+    global text
+    text = ""
     print("You are player", player)
 
     while run:
@@ -234,19 +337,26 @@ def main():
 
             font = pygame.font.SysFont("arial", 60)
             if (game.winner() == 1 and player == 1) or (game.winner() == 0 and player == 0):
-                text = font.render("You won!", 1, (255, 0, 0))
+                if game.connected():
+                    text = font.render("You won!", 1, (255, 0, 0))
             elif game.winner == -1:
                 pass
             else:
-                text = font.render("You lost!", 1, (255, 0, 0))
+                if game.connected():
+                    text = font.render("You lost!", 1, (255, 0, 0))
 
-            win.blit(text, (300, height/2 - text.get_height()/2))
+            if text != "":
+                win.blit(text, (300, height/2 - text.get_height()/2))
             pygame.display.update()
             pygame.time.delay(2000)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
+
+            if event.type == pygame.VIDEORESIZE:
+                if not fullscreen:
+                    win =pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 pos = pygame.mouse.get_pos()

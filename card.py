@@ -6,12 +6,12 @@ class Card:
         self.farbe = farbe
         self.img = "img/" + str(farbe) + str(zahl) + ".png"
 
-    def passt(self, stapel, card):
-        if stapel.zahl == card.zahl:
+    def passt(self, card):
+        if self.zahl == card.zahl:
             return True
-        elif stapel.farbe == card.farbe:
+        elif self.farbe == card.farbe:
             return True
-        elif card.zahl == 11:
+        elif self.zahl == 11:
             return True
         else:
             return False
